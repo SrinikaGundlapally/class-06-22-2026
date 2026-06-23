@@ -1,0 +1,131 @@
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+library(ggplot2)
+library(lubridate)
+library(readr)
+
+# Load the historical weather dataset
+weather_data <- read_csv("portland_daily_highs.csv")
+
+# 1. Data Preparation
+# Convert Date to a proper Date object
+weather_data$Date <- as.Date(weather_data$Date)
+
+# Create a numeric day_of_year column (1-365) using lubridate::yday()
+weather_data$day_of_year <- yday(weather_data$Date)
+
+# 2. Identify the Top 3 Highest Temperature Records
+# Sorting descending by Fahrenheit and picking the top 3 rows
+top_3_records <- weather_data[order(-weather_data$Max_Temp_F), ][1:3, ]
+#
+#
+#
+#
+#
+# Define month starts in day-of-year for a standard year (non-leap year)
+month_breaks <- c(1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335)
+month_labels <- c("Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec.")
+
+# Create the NYT-style seasonal scatter plot
+ggplot(weather_data, aes(x = day_of_year, y = Max_Temp_F)) +
+  # Plot all historical highs as a slate-gray "climate cloud"
+  geom_point(color = "#a2b1b9", alpha = 0.28, size = 1.0, stroke = 0) +
+  
+  # Highlight the top 3 highest temperature records as larger, vivid red dots
+  geom_point(data = top_3_records, aes(x = day_of_year, y = Max_Temp_F), 
+             color = "#c0392b", size = 3.8, stroke = 0.8) +
+  
+  # Draw a subtle indicator line connecting the annotation to the heatwave dots
+  annotate("segment",
+           x = 179 + 2, xend = 179 + 9,
+           y = 114.8, yend = 114.8,
+           color = "#c0392b",
+           linewidth = 0.3,
+           alpha = 0.8) +
+  
+  # Add the text annotation pointing to the record heatwave
+  annotate("text", 
+           x = 179 + 11, 
+           y = 114.8, 
+           label = "Record heatwave\nJune 2021", 
+           hjust = 0, 
+           vjust = 0.5, 
+           color = "#c0392b", 
+           size = 3.2, 
+           fontface = "bold",
+           lineheight = 0.95) +
+  
+  # Adjust axes
+  scale_x_continuous(
+    breaks = month_breaks, 
+    labels = month_labels, 
+    expand = c(0.01, 0.01)
+  ) +
+  scale_y_continuous(
+    breaks = seq(20, 120, by = 10), 
+    limits = c(10, 120),
+    expand = c(0, 0)
+  ) +
+  
+  # Title, subtitle, and caption styling
+  labs(
+    title = "Portland Daily High Temperatures (1990 - 2026)",
+    subtitle = "Degrees Fahrenheit",
+    caption = "Source: Open-Meteo Historical Weather API. Records include ERA5 reanalysis data."
+  ) +
+  
+  # Minimalist design matching specifications
+  theme_minimal() +
+  theme(
+    # Remove vertical grid lines entirely
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    
+    # Remove minor horizontal lines, keep light major horizontal lines
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_line(color = "#e5e5e5", linewidth = 0.35),
+    
+    # Remove axis titles for clean NYT look
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    
+    # Text styling
+    axis.text = element_text(color = "#555555", size = 9),
+    plot.title = element_text(face = "bold", size = 13, color = "#111111", margin = margin(b = 4)),
+    plot.subtitle = element_text(size = 9, color = "#555555", margin = margin(b = 12)),
+    plot.caption = element_text(size = 7, color = "#888888", hjust = 0, margin = margin(t = 12)),
+    
+    # Clean margins
+    plot.margin = margin(t = 15, r = 15, b = 10, l = 15)
+  )
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
