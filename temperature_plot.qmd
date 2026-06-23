@@ -114,3 +114,15 @@ ggplot(weather_data, aes(x = day_of_year, y = Max_Temp_F)) +
     plot.margin = margin(t = 15, r = 15, b = 10, l = 15)
   )
 ```
+
+## Key Insights from the Data
+
+### 1. The June 2021 Heatwave as an Extreme Outlier
+The red dots representing the June 2021 heatwave (reaching **114.8°F** and **112.0°F**) are completely detached from the rest of the seasonal temperature cloud. This is not just a typical summer peak; it is an extraordinary statistical anomaly sitting nearly 10°F above the next highest historic records for June, demonstrating the severe nature of the Pacific Northwest heat dome event.
+
+### 2. Upward Trend in Temperature Baselines
+Analyzing the underlying dataset shows that average highs are shifting upwards. The decade average for the **2020s (62.7°F)** is higher than the **1990s (62.3°F)**, **2000s (62.0°F)**, and **2010s (62.1°F)**. This upward creep is matched by rising maximum records, which have repeatedly breached the 105°F mark in recent years.
+
+### 3. Severe Winter Arctic Outbreaks
+The bottom edge of the climate cloud outlines Portland's winter bounds. While Portland winters are generally mild (daily highs typically in the 40s), periodic Arctic cold fronts drag daytime highs below freezing. The most severe recent outlier is **January 13, 2024 (15.8°F)**, showing that winter extremes can still be severe even amidst general warming trends.
+
